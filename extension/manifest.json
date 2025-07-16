@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "Fast Slow Video Controller",
+  "version": "1.0.0",
+  "description": "Precise keyboard and UI control for HTML5 video speed.",
+  "permissions": ["storage", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html",
+  "action": {
+    "default_title": "Fast Slow Video Controller"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}

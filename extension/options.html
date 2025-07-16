@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fast Slow Video Controller Settings</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    label { display: block; margin: 1em 0 0.2em; }
+    input[type="text"] { width: 2em; text-align: center; }
+    .shortcut-list { margin: 1em 0; }
+    .shortcut-row { margin-bottom: 0.5em; }
+    .shortcut-row input { width: 2em; }
+    .shortcut-row button { margin-left: 0.5em; }
+  </style>
+</head>
+<body>
+  <h2>Fast Slow Video Controller Settings</h2>
+  <form id="settingsForm">
+    <label>Decrease Speed Key: <input type="text" id="decreaseKey" maxlength="1"></label>
+    <label>Increase Speed Key: <input type="text" id="increaseKey" maxlength="1"></label>
+    <label>Reset Speed Key: <input type="text" id="resetKey" maxlength="1"></label>
+    <label>Increment (%): <input type="number" id="increment" min="1" max="50"></label>
+    <label><input type="checkbox" id="rememberPerSite"> Remember last speed per site</label>
+    <label><input type="number" id="defaultSpeed" min="0.07" max="16" step="0.01"> Default speed on video start</label>
+    <button type="submit">Save</button>
+  </form>
+  <script src="options.js"></script>
+</body>
+</html>
