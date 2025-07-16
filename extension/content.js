@@ -2,8 +2,8 @@
 // Injects video speed controls, overlays, and keyboard listeners
 
 const DEFAULT_SETTINGS = {
-  decreaseKey: '{',
-  increaseKey: '}',
+  decreaseKey: '[',
+  increaseKey: ']',
   resetKey: 'r',
   increment: 5,
   rememberPerSite: false,
@@ -90,10 +90,10 @@ function handleKey(e) {
   if (!video) return;
   let handled = false;
   if (e.key === settings.decreaseKey) {
-    setSpeed(video, video.playbackRate * (1 - settings.increment/100));
+    setSpeed(video, video.playbackRate - (settings.increment/100));
     handled = true;
   } else if (e.key === settings.increaseKey) {
-    setSpeed(video, video.playbackRate * (1 + settings.increment/100));
+    setSpeed(video, video.playbackRate + (settings.increment/100));
     handled = true;
   } else if (e.key === settings.resetKey) {
     setSpeed(video, 1.0);
