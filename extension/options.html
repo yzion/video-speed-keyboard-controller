@@ -4,25 +4,112 @@
   <meta charset="UTF-8">
   <title>Fast Slow Video Controller Settings</title>
   <style>
-    body { font-family: sans-serif; margin: 2em; }
-    label { display: block; margin: 1em 0 0.2em; }
-    input[type="text"] { width: 2em; text-align: center; }
-    .shortcut-list { margin: 1em 0; }
-    .shortcut-row { margin-bottom: 0.5em; }
-    .shortcut-row input { width: 2em; }
-    .shortcut-row button { margin-left: 0.5em; }
+    body { font-family: sans-serif; margin: 2em; max-width: 600px; }
+    .setting-group { 
+      display: flex; 
+      align-items: center; 
+      margin: 1em 0; 
+      gap: 10px; 
+    }
+    .setting-group label { 
+      display: flex; 
+      align-items: center; 
+      margin: 0; 
+      min-width: 180px; 
+    }
+    input[type="text"] { width: 3em; text-align: center; padding: 4px; }
+    input[type="number"] { width: 4em; padding: 4px; }
+    input[type="checkbox"] { margin-right: 8px; }
+    .default-value { 
+      color: #666; 
+      font-size: 0.9em; 
+      font-style: italic; 
+      min-width: 80px; 
+    }
+    .reset-btn { 
+      padding: 2px 8px; 
+      font-size: 0.8em; 
+      background-color: #f44336; 
+      color: white; 
+      border: none; 
+      border-radius: 3px; 
+      cursor: pointer; 
+    }
+    .reset-btn:hover { background-color: #d32f2f; }
+    .custom-value { 
+      border: 2px solid #007cba !important; 
+      background-color: #f0f8ff; 
+    }
+    .actions { 
+      margin-top: 30px; 
+      display: flex; 
+      gap: 10px; 
+    }
+    .actions button { 
+      padding: 10px 20px; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      font-size: 14px; 
+    }
+    #saveBtn { background-color: #4CAF50; color: white; }
+    #saveBtn:hover { background-color: #45a049; }
+    #resetAllBtn { background-color: #ff9800; color: white; }
+    #resetAllBtn:hover { background-color: #f57c00; }
+    .save-message { 
+      color: #4CAF50; 
+      font-weight: bold; 
+      margin-left: 10px; 
+      opacity: 0; 
+      transition: opacity 0.3s; 
+    }
+    .save-message.show { opacity: 1; }
   </style>
 </head>
 <body>
   <h2>Fast Slow Video Controller Settings</h2>
   <form id="settingsForm">
-    <label>Decrease Speed Key: <input type="text" id="decreaseKey" maxlength="1"></label>
-    <label>Increase Speed Key: <input type="text" id="increaseKey" maxlength="1"></label>
-    <label>Reset Speed Key: <input type="text" id="resetKey" maxlength="1"></label>
-    <label>Increment (%): <input type="number" id="increment" min="1" max="50"></label>
-    <label><input type="checkbox" id="rememberPerSite"> Remember last speed per site</label>
-    <label><input type="number" id="defaultSpeed" min="0.07" max="16" step="0.01"> Default speed on video start</label>
-    <button type="submit">Save</button>
+    <div class="setting-group">
+      <label>Decrease Speed Key: <input type="text" id="decreaseKey" maxlength="1"></label>
+      <span class="default-value">Default: [</span>
+      <button type="button" class="reset-btn" data-setting="decreaseKey">Reset</button>
+    </div>
+    
+    <div class="setting-group">
+      <label>Increase Speed Key: <input type="text" id="increaseKey" maxlength="1"></label>
+      <span class="default-value">Default: ]</span>
+      <button type="button" class="reset-btn" data-setting="increaseKey">Reset</button>
+    </div>
+    
+    <div class="setting-group">
+      <label>Reset Speed Key: <input type="text" id="resetKey" maxlength="1"></label>
+      <span class="default-value">Default: r</span>
+      <button type="button" class="reset-btn" data-setting="resetKey">Reset</button>
+    </div>
+    
+    <div class="setting-group">
+      <label>Increment: <input type="number" id="increment" min="1" max="50"></label>
+      <span class="default-value">Default: 5</span>
+      <button type="button" class="reset-btn" data-setting="increment">Reset</button>
+    </div>
+    
+    <div class="setting-group">
+      <label><input type="checkbox" id="rememberPerSite"> Remember last speed per site</label>
+      <span class="default-value">Default: false</span>
+      <button type="button" class="reset-btn" data-setting="rememberPerSite">Reset</button>
+    </div>
+    
+    <div class="setting-group">
+      <label>Default speed on video start: <input type="number" id="defaultSpeed" min="0.07" max="16" step="0.01"></label>
+      <span class="default-value">Default: 1.0</span>
+      <button type="button" class="reset-btn" data-setting="defaultSpeed">Reset</button>
+    </div>
+    
+    <div class="actions">
+      <button type="submit" id="saveBtn">Save Settings</button>
+      <button type="button" id="resetAllBtn">Reset All to Default</button>
+      <span class="save-message" id="saveMessage">Settings saved!</span>
+    </div>
   </form>
   <script src="options.js"></script>
 </body>
