@@ -78,6 +78,20 @@ function setSpeed(video, speed, show = true) {
   speed = Math.max(0.07, Math.min(speed, 16));
   video.playbackRate = speed;
   if (show) showSpeed(video, speed);
+  
+  // Notify background script about speed change to update icon
+  console.log('Content: sending speedChanged message with speed:', speed);
+  chrome.runtime.sendMessage({
+    type: 'speedChanged',
+    speed: speed
+  }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Content: Error sending speed message:', chrome.runtime.lastError);
+    } else {
+      console.log('Content: Speed message sent successfully:', response);
+    }
+  });
+  
   if (settings.rememberPerSite) {
     const key = 'speed_' + location.hostname;
     chrome.storage.local.set({[key]: speed});
@@ -116,7 +130,21 @@ const observer = new MutationObserver(() => {
       if (settings.defaultSpeed && video.playbackRate !== settings.defaultSpeed) {
         setSpeed(video, settings.defaultSpeed, false);
       }
-      video.addEventListener('ratechange', () => showSpeed(video, video.playbackRate));
+      video.addEventListener('ratechange', () => {
+        showSpeed(video, video.playbackRate);
+        // Update icon when rate changes externally
+        console.log('Content: video rate changed to:', video.playbackRate);
+        chrome.runtime.sendMessage({
+          type: 'speedChanged',
+          speed: video.playbackRate
+        }, (response) => {
+          if (chrome.runtime.lastError) {
+            console.error('Content: Error sending rate change message:', chrome.runtime.lastError);
+          } else {
+            console.log('Content: Rate change message sent successfully:', response);
+          }
+        });
+      });
     }
   });
 });
@@ -128,8 +156,34 @@ getVideos().forEach(video => {
     video._fspeedInit = true;
     if (settings.defaultSpeed && video.playbackRate !== settings.defaultSpeed) {
       setSpeed(video, settings.defaultSpeed, false);
+    } else {
+      // Update icon with current speed even if not changing it
+      chrome.runtime.sendMessage({
+        type: 'speedChanged',
+        speed: video.playbackRate
+      }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error('Content: Error sending initial speed:', chrome.runtime.lastError);
+        } else {
+          console.log('Content: Initial speed sent:', video.playbackRate);
+        }
+      });
     }
-    video.addEventListener('ratechange', () => showSpeed(video, video.playbackRate));
+    video.addEventListener('ratechange', () => {
+      showSpeed(video, video.playbackRate);
+      // Update icon when rate changes externally
+      console.log('Content: video rate changed to:', video.playbackRate);
+      chrome.runtime.sendMessage({
+        type: 'speedChanged',
+        speed: video.playbackRate
+      }, (response) => {
+        if (chrome.runtime.lastError) {
+          console.error('Content: Error sending rate change message:', chrome.runtime.lastError);
+        } else {
+          console.log('Content: Rate change message sent successfully:', response);
+        }
+      });
+    });
   }
 });
 
@@ -138,7 +192,9 @@ if (settings.rememberPerSite) {
   const key = 'speed_' + location.hostname;
   chrome.storage.local.get([key], (res) => {
     if (res[key]) {
-      getVideos().forEach(v => setSpeed(v, res[key], false));
+      getVideos().forEach(v => {
+        setSpeed(v, res[key], false);
+      });
     }
   });
 }

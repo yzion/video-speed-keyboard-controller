@@ -1,12 +1,12 @@
 # Fast Slow Video Controller
 
-A Chrome/Firefox browser extension that enables precise control over HTML5 video playback speed using keyboard shortcuts.
+A Chrome browser extension that enables precise control over HTML5 video playback speed using keyboard shortcuts.
 
 ## Core Features
 
 ### Keyboard Control
-- `{` key: Decrease playback speed by 5% (multiply by 0.95)
-- `}` key: Increase playback speed by 5% (multiply by 1.05)
+- `[` key: Decrease playback speed by 5%
+- `]` key: Increase playback speed by 5%
 - `r` key: Reset speed to 1× (optional)
 
 ### Speed Indicator Overlay
